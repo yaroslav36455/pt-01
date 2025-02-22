@@ -1,0 +1,6 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://${DOCKER_PRODUCT_MONGODB_USER_NAME}:${DOCKER_PRODUCT_MONGODB_USER_PASSWORD}@localhost:27017/${DOCKER_PRODUCT_MONGODB_NAME}?authSource=admin
+server:
+  port: 8100

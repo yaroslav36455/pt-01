@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: customer-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://customer-postgres:${DOCKER_CUSTOMER_POSTGRES_DB_PORT}/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
+    username: ${DOCKER_CUSTOMER_POSTGRES_DB_USER_NAME}
+    password: ${DOCKER_CUSTOMER_POSTGRES_DB_USER_PASSWORD}
+  liquibase:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://customer-postgres:${DOCKER_CUSTOMER_POSTGRES_DB_PORT}/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
+    user: ${DOCKER_CUSTOMER_POSTGRES_DB_USER_NAME}
+    password: ${DOCKER_CUSTOMER_POSTGRES_DB_USER_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+        max-retries-on-same-service-instance: 2
+        max-retries-on-next-service-instance: 1
+        retry-on-all-operations: true
+server:
+  port: 0
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DOCKER_EUREKA_SERVER_HOST}:${DOCKER_EUREKA_SERVER_PORT}/eureka
+
+service:
+  document:
+    url: resource-service
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+  api-docs:
+    path: /v3/api-docs

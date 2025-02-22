@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-customer
+      author: yaroslav.tarasenko
+      dbms: postgresql
+      changes:
+        - sqlFile:
+            path: db/changelog/scripts/202501201453_create_customer.sql
+      rollback:
+        - sqlFile:
+            path: db/changelog/scripts/202501201453_create_customer_rollback.sql
+  - changeSet:
+      id: create-address
+      author: yaroslav.tarasenko
+      dbms: postgresql
+      changes:
+        - sqlFile:
+            path: db/changelog/scripts/202502092034_create_address.sql
+      rollback:
+        - sqlFile:
+            path: db/changelog/scripts/202502092034_create_address_rollback.sql
+

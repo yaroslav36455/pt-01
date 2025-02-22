@@ -1,0 +1,28 @@
+testcontainers:
+  postgres:
+    version: 15.10
+
+spring:
+  datasource:
+    driver-class-name:
+    url:
+    username:
+    password:
+  liquibase:
+    change-log: "classpath:/db/changelog/db.changelog-test.yaml"
+    enabled: true
+    driver-class-name:
+    url:
+    user:
+    password:
+  cloud:
+    loadbalancer:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false
+
+service:
+  document:
+    url: resource-service

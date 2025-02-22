@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/customer-service/src/main/resources/db/changelog/scripts/202501201453_create_customer.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/customer-service/src/main/resources/db/changelog/scripts/202501201453_create_customer_rollback.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/customer-service/src/main/resources/db/changelog/scripts/202502092034_create_address.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/customer-service/src/main/resources/db/changelog/scripts/202502092034_create_address_rollback.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/customer-service/src/test/resources/db/changelog/scripts/202501201453_fill_customer.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/customer-service/src/test/resources/scripts/cleanup_address.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/customer-service/src/test/resources/scripts/cleanup_customer.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/customer-service/src/test/resources/scripts/insert_address.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/customer-service/src/test/resources/scripts/insert_customer.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/customer-service/src/test/resources/scripts/insert_customer_without_document.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/resource-service/src/main/resources/db/changelog/scripts/202501202110_create_storage_resource.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/resource-service/src/main/resources/db/changelog/scripts/202501202110_create_storage_resource_rollback.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/resource-service/src/test/resources/db/changelog/scripts/202501202110_fill_storage_resource.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/resource-service/src/test/resources/scripts/cleanup_resource.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/resource-service/src/test/resources/scripts/insert_resource.sql" dialect="PostgreSQL" />
+  </component>
+</project>

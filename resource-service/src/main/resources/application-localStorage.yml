@@ -1,0 +1,2 @@
+storage:
+  path: ${DOCKER_RESOURCE_STORAGE_PATH}

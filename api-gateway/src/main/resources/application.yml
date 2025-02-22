@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: discovery
+          uri: ${DOCKER_EUREKA_SERVER_HOST}:${DOCKER_EUREKA_SERVER_PORT}
+          predicates:
+            - Path=/eureka-ui
+          filters:
+            - StripPrefix=1
+        - id: discovery_static
+          uri: ${DOCKER_EUREKA_SERVER_HOST}:${DOCKER_EUREKA_SERVER_PORT}
+          predicates:
+            - Path=/eureka/css/**, /eureka/js/**, /eureka/fonts/**
+        - id: product_service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/product/**
+            - Method=GET,POST,PUT
+        - id: product_service_docs
+          uri: lb://product-service
+          predicates:
+            - Path=/swagger-ui/product-service/v3/api/docs
+          filters:
+            - RewritePath=/swagger-ui/product-service/v3/api/docs, /v3/api-docs
+        - id: customer_service
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/customer/**, /api/address/**
+        - id: customer_service_docs
+          uri: lb://customer-service
+          predicates:
+            - Path=/swagger-ui/customer-service/v3/api/docs
+          filters:
+            - RewritePath=/swagger-ui/customer-service/v3/api/docs, /v3/api-docs
+        - id: resource_service
+          uri: lb://resource-service
+          predicates:
+            - Path=/api/resource/**
+            - Method=GET,POST
+        - id: resource_service_docs
+          uri: lb://resource-service
+          predicates:
+            - Path=/swagger-ui/resource-service/v3/api/docs
+          filters:
+            - RewritePath=/swagger-ui/resource-service/v3/api/docs, /v3/api-docs
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DOCKER_EUREKA_SERVER_HOST}:${DOCKER_EUREKA_SERVER_PORT}/eureka
+server:
+  port: ${DOCKER_API_GATEWAY_PORT}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+    urls:
+      - name: Product service
+        url: /swagger-ui/product-service/v3/api/docs
+      - name: Customer service
+        url: /swagger-ui/customer-service/v3/api/docs
+      - name: Resource service
+        url: /swagger-ui/resource-service/v3/api/docs
+  api-docs:
+    path: /v3/api-docs

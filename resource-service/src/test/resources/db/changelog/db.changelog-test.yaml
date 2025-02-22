@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: classpath:/db/changelog/db.changelog-master.yaml
+  - changeSet:
+      id: create-table
+      author: yaroslav.tarasenko
+      changes:
+        - sqlFile:
+            path: db/changelog/scripts/202501202110_fill_storage_resource.sql

@@ -1,0 +1,11 @@
+spring:
+  liquibase:
+    url: jdbc:postgresql://localhost:${POSTGRES_DB_PORT}/${DOCKER_RESOURCE_POSTGRES_DB_NAME}
+  datasource:
+    url: jdbc:postgresql://localhost:${POSTGRES_DB_PORT}/${DOCKER_RESOURCE_POSTGRES_DB_NAME}
+
+server:
+  port: 8080
+logging:
+  level:
+    org.springframework.web: debug

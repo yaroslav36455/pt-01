@@ -1,0 +1,1 @@
+TRUNCATE storage_resource RESTART IDENTITY;

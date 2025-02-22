@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: discovery-server
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    eviction-interval-timer-in-ms: 60000
+    renewal-threshold-update-interval-ms: 15000
+server:
+  port: ${DOCKER_EUREKA_SERVER_PORT}

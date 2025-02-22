@@ -1,0 +1,179 @@
+networks:
+  common-network:
+    driver: bridge
+    name: common-network
+
+volumes:
+  customer_postgres:
+    name: customer_postgres
+  resource_postgres:
+    name: resource_postgres
+  resource_storage:
+    name: resource_storage
+
+
+services:
+
+  discovery-server:
+    container_name: discovery-server
+    image: discovery-server:0.1.0
+    build:
+      context: ./discovery-server
+    environment:
+      DOCKER_EUREKA_SERVER_PORT: ${DOCKER_EUREKA_SERVER_PORT}
+    networks:
+      - common-network
+    deploy:
+      resources:
+        limits:
+          memory: 500MB
+
+  api-gateway:
+    container_name: api-gateway
+    image: api-gateway:0.1.0
+    build:
+      context: ./api-gateway
+    environment:
+      DOCKER_EUREKA_SERVER_HOST: ${DOCKER_EUREKA_SERVER_HOST}
+      DOCKER_EUREKA_SERVER_PORT: ${DOCKER_EUREKA_SERVER_PORT}
+      DOCKER_API_GATEWAY_PORT: ${DOCKER_API_GATEWAY_PORT}
+    ports:
+      - ${DOCKER_API_GATEWAY_PORT}:${DOCKER_API_GATEWAY_PORT}
+    networks:
+      - common-network
+    depends_on:
+      - discovery-server
+    deploy:
+      resources:
+        limits:
+          memory: 300MB
+
+  customer-postgres:
+    container_name: customer-postgres
+    image: postgres:${DOCKER_CUSTOMER_POSTGRES_DB_VERSION}
+    volumes:
+      - customer_postgres:/var/lib/postgresql/data
+    environment:
+      PGPORT: ${DOCKER_CUSTOMER_POSTGRES_DB_PORT}
+      POSTGRES_USER: ${DOCKER_CUSTOMER_POSTGRES_DB_USER_NAME}
+      POSTGRES_PASSWORD: ${DOCKER_CUSTOMER_POSTGRES_DB_USER_PASSWORD}
+      POSTGRES_DB: ${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
+    networks:
+      - common-network
+    deploy:
+      resources:
+        limits:
+          memory: 300MB
+
+  customer-service:
+#    container_name: customer-service
+    image: customer-service:0.1.0
+    build:
+      context: ./customer-service
+    environment:
+      DOCKER_EUREKA_SERVER_HOST: ${DOCKER_EUREKA_SERVER_HOST}
+      DOCKER_EUREKA_SERVER_PORT: ${DOCKER_EUREKA_SERVER_PORT}
+      DOCKER_CUSTOMER_POSTGRES_DB_VERSION: ${DOCKER_CUSTOMER_POSTGRES_DB_VERSION}
+      DOCKER_CUSTOMER_POSTGRES_DB_PORT: ${DOCKER_CUSTOMER_POSTGRES_DB_PORT}
+      DOCKER_CUSTOMER_POSTGRES_DB_NAME: ${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
+      DOCKER_CUSTOMER_POSTGRES_DB_USER_NAME: ${DOCKER_CUSTOMER_POSTGRES_DB_USER_NAME}
+      DOCKER_CUSTOMER_POSTGRES_DB_USER_PASSWORD: ${DOCKER_CUSTOMER_POSTGRES_DB_USER_PASSWORD}
+    networks:
+      - common-network
+    depends_on:
+      - customer-postgres
+      - discovery-server
+    deploy:
+      mode: replicated
+      replicas: 3
+      resources:
+        limits:
+          memory: 700MB
+
+  product-mongodb:
+    container_name: product-mongodb
+    image: mongo:${DOCKER_PRODUCT_MONGODB_VERSION}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DOCKER_PRODUCT_MONGODB_USER_NAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DOCKER_PRODUCT_MONGODB_USER_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DOCKER_PRODUCT_MONGODB_NAME}
+    networks:
+      - common-network
+    deploy:
+      resources:
+        limits:
+          memory: 300MB
+
+  product-service:
+#    container_name: product-service
+    image: product-service:0.1.0
+    build:
+      context: ./product-service
+    environment:
+      DOCKER_EUREKA_SERVER_HOST: ${DOCKER_EUREKA_SERVER_HOST}
+      DOCKER_EUREKA_SERVER_PORT: ${DOCKER_EUREKA_SERVER_PORT}
+      DOCKER_PRODUCT_MONGODB_VERSION: ${DOCKER_PRODUCT_MONGODB_VERSION}
+      DOCKER_PRODUCT_MONGODB_NAME: ${DOCKER_PRODUCT_MONGODB_NAME}
+      DOCKER_PRODUCT_MONGODB_USER_NAME: ${DOCKER_PRODUCT_MONGODB_USER_NAME}
+      DOCKER_PRODUCT_MONGODB_USER_PASSWORD: ${DOCKER_PRODUCT_MONGODB_USER_PASSWORD}
+    networks:
+      - common-network
+    depends_on:
+      - product-mongodb
+      - discovery-server
+    deploy:
+      mode: replicated
+      replicas: 3
+      resources:
+        limits:
+          memory: 700MB
+
+
+  resource-postgres:
+    container_name: resource-postgres
+    image: postgres:${DOCKER_RESOURCE_POSTGRES_DB_VERSION}
+    volumes:
+      - resource_postgres:/var/lib/postgresql/data
+    environment:
+      PGPORT: ${DOCKER_RESOURCE_POSTGRES_DB_PORT}
+      POSTGRES_USER: ${DOCKER_RESOURCE_POSTGRES_DB_USER_NAME}
+      POSTGRES_PASSWORD: ${DOCKER_RESOURCE_POSTGRES_DB_USER_PASSWORD}
+      POSTGRES_DB: ${DOCKER_RESOURCE_POSTGRES_DB_NAME}
+    networks:
+      - common-network
+    deploy:
+      resources:
+        limits:
+          memory: 300MB
+
+  resource-service:
+#    container_name: resource-service
+    image: resource-service:0.1.0
+    build:
+      context: ./resource-service
+    environment:
+      DOCKER_EUREKA_SERVER_HOST: ${DOCKER_EUREKA_SERVER_HOST}
+      DOCKER_EUREKA_SERVER_PORT: ${DOCKER_EUREKA_SERVER_PORT}
+      DOCKER_RESOURCE_POSTGRES_DB_VERSION: ${DOCKER_RESOURCE_POSTGRES_DB_VERSION}
+      DOCKER_RESOURCE_POSTGRES_DB_PORT: ${DOCKER_RESOURCE_POSTGRES_DB_PORT}
+      DOCKER_RESOURCE_POSTGRES_DB_NAME: ${DOCKER_RESOURCE_POSTGRES_DB_NAME}
+      DOCKER_RESOURCE_POSTGRES_DB_USER_NAME: ${DOCKER_RESOURCE_POSTGRES_DB_USER_NAME}
+      DOCKER_RESOURCE_POSTGRES_DB_USER_PASSWORD: ${DOCKER_RESOURCE_POSTGRES_DB_USER_PASSWORD}
+      DOCKER_RESOURCE_PROFILES_ACTIVE: ${DOCKER_RESOURCE_PROFILES_ACTIVE}
+      DOCKER_RESOURCE_STORAGE_PATH: ${DOCKER_RESOURCE_STORAGE_PATH}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION}
+    volumes:
+      - resource_storage:${DOCKER_RESOURCE_STORAGE_PATH}
+    networks:
+      - common-network
+    depends_on:
+      - resource-postgres
+      - discovery-server
+    deploy:
+      mode: replicated
+      replicas: 3
+      resources:
+        limits:
+          memory: 700MB

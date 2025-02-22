@@ -1,0 +1,6 @@
+testcontainers:
+  mongodb:
+    version: 4.0.10
+eureka:
+  client:
+    enabled: false

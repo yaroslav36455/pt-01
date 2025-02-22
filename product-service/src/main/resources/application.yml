@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: product-service
+  data:
+    mongodb:
+      uri: mongodb://${DOCKER_PRODUCT_MONGODB_USER_NAME}:${DOCKER_PRODUCT_MONGODB_USER_PASSWORD}@product-mongodb:27017/${DOCKER_PRODUCT_MONGODB_NAME}?authSource=admin
+      auto-index-creation: true
+server:
+  port: 0
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DOCKER_EUREKA_SERVER_HOST}:${DOCKER_EUREKA_SERVER_PORT}/eureka
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+  api-docs:
+    path: /v3/api-docs

@@ -1,0 +1,23 @@
+testcontainers:
+  postgres:
+    version: 15.10
+
+
+spring:
+  datasource:
+    driver-class-name:
+    url:
+    username:
+    password:
+  liquibase:
+    change-log: "classpath:/db/changelog/db.changelog-test.yaml"
+    enabled: true
+    driver-class-name:
+    url:
+    user:
+    password:
+#  main:
+#    allow-bean-definition-overriding: true
+eureka:
+  client:
+    enabled: false

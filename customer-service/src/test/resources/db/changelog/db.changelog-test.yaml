@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: classpath:/db/changelog/db.changelog-master.yaml
+  - changeSet:
+      dbms: postgresql
+      id: fill-customer
+      author: yaroslav.tarasenko
+      changes:
+        - sqlFile:
+            path: db/changelog/scripts/202501201453_fill_customer.sql
