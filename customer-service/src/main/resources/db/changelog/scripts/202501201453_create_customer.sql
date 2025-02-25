@@ -1,4 +1,4 @@
-CREATE TABLE customer
+CREATE TABLE IF NOT EXISTS customer
 (
     id         BIGSERIAL,
     created_at TIMESTAMP NOT NULL,

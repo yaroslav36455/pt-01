@@ -1,4 +1,4 @@
-CREATE TABLE address
+CREATE TABLE IF NOT EXISTS address
 (
     id          BIGSERIAL,
     created_at  TIMESTAMP NOT NULL,

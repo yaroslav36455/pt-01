@@ -1,4 +1,4 @@
-CREATE TABLE storage_resource
+CREATE TABLE IF NOT EXISTS storage_resource
 (
     id           BIGSERIAL,
     created_at   TIMESTAMP NOT NULL,
