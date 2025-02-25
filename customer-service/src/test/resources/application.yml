@@ -6,15 +6,19 @@ spring:
   datasource:
     driver-class-name:
     url:
-    username:
-    password:
+    username: test
+    password: test
+  r2dbc:
+    url:
+    username: test
+    password: test
   liquibase:
     change-log: "classpath:/db/changelog/db.changelog-test.yaml"
     enabled: true
     driver-class-name:
     url:
-    user:
-    password:
+    user: test
+    password: test
   cloud:
     loadbalancer:
       enabled: false

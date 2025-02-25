@@ -4,12 +4,10 @@ import com.tyv.customerservice.TestcontainersConfiguration;
 import com.tyv.customerservice.client.DocumentClient;
 import com.tyv.customerservice.dto.AddressDto;
 import com.tyv.customerservice.dto.CustomerDto;
-import com.tyv.customerservice.entity.Customer;
 import com.tyv.customerservice.exception.CustomerNotFoundException;
-import com.tyv.customerservice.repository.CustomerRepository;
+import com.tyv.customerservice.repository.CustomerRepositoryCrud;
 import com.tyv.customerservice.util.AddressUtil;
 import com.tyv.customerservice.util.CustomerUtil;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +18,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 import reactor.test.StepVerifier;
 
-import java.util.List;
-
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest
 class CustomerServiceImplTest {
@@ -30,7 +26,7 @@ class CustomerServiceImplTest {
     private CustomerService customerService;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerRepositoryCrud customerRepository;
 
     @MockitoBean
     private DocumentClient documentClient;
@@ -80,8 +76,9 @@ class CustomerServiceImplTest {
                 .assertNext(actual -> CustomerUtil.assertEqual(actual, customerResponseDto))
                 .verifyComplete();
 
-        List<Customer> customers = customerRepository.findAll();
-        Assertions.assertThat(customers).hasSize(1);
+        StepVerifier.create(customerRepository.findAll())
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
     @Test
@@ -98,8 +95,9 @@ class CustomerServiceImplTest {
                 .expectError(DataIntegrityViolationException.class)
                 .verify();
 
-        List<Customer> customers = customerRepository.findAll();
-        Assertions.assertThat(customers).hasSize(1);
+        StepVerifier.create(customerRepository.findAll())
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
     @Test
@@ -124,8 +122,9 @@ class CustomerServiceImplTest {
                 .assertNext(actual -> CustomerUtil.assertEqual(actual, customerResponseDto))
                 .verifyComplete();
 
-        List<Customer> customers = customerRepository.findAll();
-        Assertions.assertThat(customers).hasSize(1);
+        StepVerifier.create(customerRepository.findAll())
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
     @Test
@@ -163,8 +162,9 @@ class CustomerServiceImplTest {
                 .assertNext(actual -> CustomerUtil.assertEqual(actual, customerResponseDto))
                 .verifyComplete();
 
-        List<Customer> customers = customerRepository.findAll();
-        Assertions.assertThat(customers).hasSize(1);
+        StepVerifier.create(customerRepository.findAll())
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
     @Test
@@ -182,7 +182,8 @@ class CustomerServiceImplTest {
                 .expectError(CustomerNotFoundException.class)
                 .verify();
 
-        List<Customer> customers = customerRepository.findAll();
-        Assertions.assertThat(customers).hasSize(1);
+        StepVerifier.create(customerRepository.findAll())
+                .expectNextCount(1)
+                .verifyComplete();
     }
 }

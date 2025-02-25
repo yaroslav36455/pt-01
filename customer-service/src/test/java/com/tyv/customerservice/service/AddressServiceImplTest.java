@@ -3,7 +3,6 @@ package com.tyv.customerservice.service;
 import com.tyv.customerservice.TestcontainersConfiguration;
 import com.tyv.customerservice.client.DocumentClient;
 import com.tyv.customerservice.dto.AddressDto;
-import com.tyv.customerservice.entity.Address;
 import com.tyv.customerservice.exception.AddressNotFoundException;
 import com.tyv.customerservice.repository.AddressRepository;
 import com.tyv.customerservice.util.AddressUtil;
@@ -34,6 +33,7 @@ class AddressServiceImplTest {
 
     @MockitoBean
     private DocumentClient documentClient;
+
 
     @Test
     @Sql(scripts = {
@@ -79,17 +79,18 @@ class AddressServiceImplTest {
                 .assertNext(addressDto -> assertEqual(addressDto, responseDto))
                 .verifyComplete();
 
-        Iterable<Address> addresses = addressRepository.findAll();
-        Assertions.assertThat(addresses).hasSize(1);
-        addresses.forEach(address -> {
-            Assertions.assertThat(address.getId()).isEqualTo(responseDto.getId());
-            Assertions.assertThat(address.getSettlement()).isEqualTo(responseDto.getSettlement());
-            Assertions.assertThat(address.getStreet()).isEqualTo(responseDto.getStreet());
-            Assertions.assertThat(address.getBuilding()).isEqualTo(responseDto.getBuilding());
-            Assertions.assertThat(address.getCustomerId()).isEqualTo(responseDto.getCustomerId());
-            Assertions.assertThat(address.getCreatedAt()).isBeforeOrEqualTo(LocalDateTime.now());
-            Assertions.assertThat(address.getUpdatedAt()).isBeforeOrEqualTo(LocalDateTime.now());
-        });
+        StepVerifier.create(addressRepository.findAll())
+                .assertNext(address -> {
+                    Assertions.assertThat(address.getId()).isEqualTo(responseDto.getId());
+                    Assertions.assertThat(address.getSettlement()).isEqualTo(responseDto.getSettlement());
+                    Assertions.assertThat(address.getStreet()).isEqualTo(responseDto.getStreet());
+                    Assertions.assertThat(address.getBuilding()).isEqualTo(responseDto.getBuilding());
+                    Assertions.assertThat(address.getCustomerId()).isEqualTo(responseDto.getCustomerId());
+                    Assertions.assertThat(address.getCreatedAt()).isBeforeOrEqualTo(LocalDateTime.now());
+                    Assertions.assertThat(address.getUpdatedAt()).isBeforeOrEqualTo(LocalDateTime.now());
+                })
+                .expectNextCount(0)
+                .verifyComplete();
     }
 
     @Test
@@ -106,8 +107,9 @@ class AddressServiceImplTest {
                 .expectError(DataIntegrityViolationException.class)
                 .verify();
 
-        Iterable<Address> addresses = addressRepository.findAll();
-        Assertions.assertThat(addresses).hasSize(1);
+        StepVerifier.create(addressRepository.findAll())
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
     @Test
@@ -122,8 +124,9 @@ class AddressServiceImplTest {
                 .expectError(DataIntegrityViolationException.class)
                 .verify();
 
-        Iterable<Address> addresses = addressRepository.findAll();
-        Assertions.assertThat(addresses).isEmpty();
+        StepVerifier.create(addressRepository.findAll())
+                .expectNextCount(0)
+                .verifyComplete();
     }
 
     @Test
@@ -145,17 +148,18 @@ class AddressServiceImplTest {
                 .assertNext(addressDto -> assertEqual(addressDto, responseDto))
                 .verifyComplete();
 
-        Iterable<Address> addresses = addressRepository.findAll();
-        Assertions.assertThat(addresses).hasSize(1);
-        addresses.forEach(address -> {
-            Assertions.assertThat(address.getId()).isEqualTo(responseDto.getId());
-            Assertions.assertThat(address.getSettlement()).isEqualTo(responseDto.getSettlement());
-            Assertions.assertThat(address.getStreet()).isEqualTo(responseDto.getStreet());
-            Assertions.assertThat(address.getBuilding()).isEqualTo(responseDto.getBuilding());
-            Assertions.assertThat(address.getCustomerId()).isEqualTo(responseDto.getCustomerId());
-            Assertions.assertThat(address.getCreatedAt()).isBeforeOrEqualTo(LocalDateTime.now());
-            Assertions.assertThat(address.getUpdatedAt()).isBeforeOrEqualTo(LocalDateTime.now());
-        });
+        StepVerifier.create(addressRepository.findAll())
+                .assertNext(address -> {
+                    Assertions.assertThat(address.getId()).isEqualTo(responseDto.getId());
+                    Assertions.assertThat(address.getSettlement()).isEqualTo(responseDto.getSettlement());
+                    Assertions.assertThat(address.getStreet()).isEqualTo(responseDto.getStreet());
+                    Assertions.assertThat(address.getBuilding()).isEqualTo(responseDto.getBuilding());
+                    Assertions.assertThat(address.getCustomerId()).isEqualTo(responseDto.getCustomerId());
+                    Assertions.assertThat(address.getCreatedAt()).isBeforeOrEqualTo(LocalDateTime.now());
+                    Assertions.assertThat(address.getUpdatedAt()).isBeforeOrEqualTo(LocalDateTime.now());
+                })
+                .expectNextCount(0)
+                .verifyComplete();
     }
 
     @Test
@@ -172,7 +176,8 @@ class AddressServiceImplTest {
                 .expectError(AddressNotFoundException.class)
                 .verify();
 
-        Iterable<Address> addresses = addressRepository.findAll();
-        Assertions.assertThat(addresses).isEmpty();
+        StepVerifier.create(addressRepository.findAll())
+                .expectNextCount(0)
+                .verifyComplete();
     }
 }

@@ -1,9 +1,8 @@
 spring:
   application:
     name: customer-service
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://customer-postgres:${DOCKER_CUSTOMER_POSTGRES_DB_PORT}/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
+  r2dbc:
+    url: r2dbc:postgresql://customer-postgres:${DOCKER_CUSTOMER_POSTGRES_DB_PORT}/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
     username: ${DOCKER_CUSTOMER_POSTGRES_DB_USER_NAME}
     password: ${DOCKER_CUSTOMER_POSTGRES_DB_USER_PASSWORD}
   liquibase:

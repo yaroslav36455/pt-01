@@ -1,6 +1,6 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5434/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5434/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
   liquibase:
     url: jdbc:postgresql://localhost:5434/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
 server:

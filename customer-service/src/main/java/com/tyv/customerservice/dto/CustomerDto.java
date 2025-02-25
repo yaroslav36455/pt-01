@@ -19,6 +19,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CustomerDto {
     @NotNull(groups = UpdateRequest.class)
