@@ -27,6 +27,11 @@ services:
       resources:
         limits:
           memory: 500MB
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${DOCKER_EUREKA_SERVER_PORT}/actuator/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   api-gateway:
     container_name: api-gateway
@@ -42,7 +47,8 @@ services:
     networks:
       - common-network
     depends_on:
-      - discovery-server
+      discovery-server:
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -81,8 +87,10 @@ services:
     networks:
       - common-network
     depends_on:
-      - customer-postgres
-      - discovery-server
+      customer-postgres:
+        condition: service_started
+      discovery-server:
+        condition: service_healthy
     deploy:
       mode: replicated
       replicas: 3
@@ -119,8 +127,10 @@ services:
     networks:
       - common-network
     depends_on:
-      - product-mongodb
-      - discovery-server
+      product-mongodb:
+        condition: service_started
+      discovery-server:
+        condition: service_healthy
     deploy:
       mode: replicated
       replicas: 3
@@ -169,8 +179,10 @@ services:
     networks:
       - common-network
     depends_on:
-      - resource-postgres
-      - discovery-server
+      resource-postgres:
+        condition: service_started
+      discovery-server:
+        condition: service_healthy
     deploy:
       mode: replicated
       replicas: 3
