@@ -28,6 +28,12 @@ eureka:
     service-url:
       defaultZone: ${DOCKER_EUREKA_SERVER_HOST}:${DOCKER_EUREKA_SERVER_PORT}/eureka
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
 service:
   document:
     url: resource-service

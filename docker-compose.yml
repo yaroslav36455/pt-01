@@ -10,6 +10,9 @@ volumes:
     name: resource_postgres
   resource_storage:
     name: resource_storage
+  grafana-service:
+    name: grafana-service
+
 
 
 services:
@@ -189,3 +192,36 @@ services:
       resources:
         limits:
           memory: 700MB
+
+
+  prometheus-service:
+    container_name: prometheus-service
+    image: prom/prometheus:v3.2.1
+    ports:
+      - "9090:9090"
+    networks:
+      - common-network
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - customer-service
+      - product-service
+      - resource-service
+
+  grafana-service:
+    container_name: grafana-service
+    image: grafana/grafana-oss:9.2.6
+    environment:
+      GF_SECURITY_ADMIN_USER: ${DOCKER_GRAFANA_SERVICE_USERNAME}
+      GF_SECURITY_ADMIN_PASSWORD: ${DOCKER_GRAFANA_SERVICE_PASSWORD}
+    ports:
+      - "3000:3000"
+    networks:
+      - common-network
+    volumes:
+      - grafana-service:/var/lib/grafana
+    depends_on:
+      - prometheus-service
+

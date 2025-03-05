@@ -12,3 +12,9 @@ eureka:
     renewal-threshold-update-interval-ms: 15000
 server:
   port: ${DOCKER_EUREKA_SERVER_PORT}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus

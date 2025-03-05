@@ -1,8 +1,8 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://localhost:5434/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
+    url: r2dbc:postgresql://localhost:5433/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
   liquibase:
-    url: jdbc:postgresql://localhost:5434/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
+    url: jdbc:postgresql://localhost:5433/${DOCKER_CUSTOMER_POSTGRES_DB_NAME}
 server:
   port: 8100
 

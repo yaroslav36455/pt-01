@@ -1,0 +1,26 @@
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: PROMETHEUS-SERVICE
+    static_configs:
+      - targets: ['prometheus-service:9090']
+        labels:
+          application: 'PROMETHEUS-SERVICE'
+  - job_name: DISCOVERY-SERVER
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['discovery-server:8761']
+        labels:
+          application: 'DISCOVERY-SERVER'
+  - job_name: spring-boot-services
+    eureka_sd_configs:
+      - server: 'http://discovery-server:8761/eureka'
+    relabel_configs:
+      - source_labels: [ __meta_eureka_app_name ]
+        target_label: job
+      - target_label: __metrics_path__
+        replacement: '/actuator/prometheus'
+      - source_labels: [ __meta_eureka_app_name ]
+        target_label: application
